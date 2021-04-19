@@ -14,12 +14,48 @@ iconImage = pygame.image.load("icon.png")
 pygame.display.set_icon(iconImage)
 
 character_icon = "red.png"
-buttons = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "red" )
+
+#start_cart = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "earth" )
+start = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "earth" )
+n_ready = pygame.image.load("NotReady.png")
+not_ready= Begin(n_ready, [start])
+
+
+
+earth_kingdom = pygame.transform.scale(pygame.image.load("Earth_kingdom.jpg"), (width, height) )
+city_earth_kingdom = pygame.transform.scale(pygame.image.load("The_well.png"), (width, height) )
+
+tavern = Button(50, 750, pygame.transform.scale(pygame.image.load("Tavern.png"), (50, 50)), pygame, "city")
+market = Button(750, 750, pygame.transform.scale(pygame.image.load("Market.png"), (50, 50)), pygame, "city")
+start_cart = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "first" )
+
+earth_scene= Begin(earth_kingdom, [start_cart, tavern, market])
+city_earth_scene= Begin(city_earth_kingdom, [start_cart])
+
+
+start_cart = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "red" )
 background = pygame.transform.scale((pygame.image.load("menu_background3.png")), (width, height))
-first_scene = Begin(background, [buttons])
-background1 = pygame.transform.scale((pygame.image.load("icon.png")), (width, height))
-second_scene = Begin(background1, [])
-scenes = {"red":second_scene}
+first_scene = Begin(background, [start_cart])
+
+
+#fire = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "NotReady")
+BigMap = pygame.transform.scale((pygame.image.load("BigMap.png")), (width, height))
+
+
+fire = Button(50, 50, pygame.transform.scale(pygame.image.load("Fire.png"), (50, 50)), pygame, "NotReady")
+water = Button(750, 50, pygame.transform.scale(pygame.image.load("Water.png"), (50, 50)), pygame, "NotReady")
+darkness = Button(50, 750, pygame.transform.scale(pygame.image.load("Darkness.png"), (50, 50)), pygame, "NotReady")
+earth = Button(750, 750, pygame.transform.scale(pygame.image.load("Earth.png"), (50, 50)), pygame, "earth")
+#fire = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "NotReady")
+BigMap = pygame.transform.scale((pygame.image.load("BigMap.png")), (width, height))
+second_scene = Begin(BigMap, [fire, water, darkness, earth])
+
+
+scenes = {"red": second_scene,
+          "NotReady": not_ready,
+          "earth":earth_scene,
+          "first":first_scene,
+          "city": city_earth_scene}
 scene = first_scene
 
 running = True
