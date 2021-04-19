@@ -1,6 +1,8 @@
 import pygame
 from Button import Button
 from Begining import Begin
+from Battle import Battle
+from Enemy import Enemy
 
 pygame.init()
 pygame.display.init()
@@ -51,15 +53,27 @@ BigMap = pygame.transform.scale((pygame.image.load("BigMap.png")), (width, heigh
 second_scene = Begin(BigMap, [fire, water, darkness, earth])
 
 
+fire_attack = Button(50, 50, pygame.transform.scale(pygame.image.load("Fire_attack.png"), (50, 50)), pygame, "fire")
+block = Button(750, 50, pygame.transform.scale(pygame.image.load("Block.png"), (50, 50)), pygame, "block")
+actions_hero = {"fire": 10,
+                "block": 10}
+actions_enemy = {"fire": 10}
+desert_battle = pygame.transform.scale((pygame.image.load("Battle.jpg")), (width, height))
+enemy = Enemy("Enemy", actions_enemy, [],  pygame.transform.scale((pygame.image.load("red.png")), (100, 100)), 100 )
+battle_scene = Battle(desert_battle, enemy,  [fire_attack, block], actions_hero, 100)
+
 scenes = {"red": second_scene,
           "NotReady": not_ready,
           "earth":earth_scene,
           "first":first_scene,
           "city": city_earth_scene}
-scene = first_scene
+scene = battle_scene
 
 running = True
 while running:
+
+
+
     scene.drawing(window)
     pygame.display.update()
     # mx, my = pygame.mouse.get_pos()
@@ -69,10 +83,13 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mx, my = pygame.mouse.get_pos()
+
+            """
             if(scene.hit_button((mx, my))):
                 scene = scenes[scene.hit_button((mx, my))]
             #if(b.collides((mx, my))):
              #   window.fill((255, 255, 0))
+             """
 
     if (running == False):  # else there will be segmentation fault
         break
