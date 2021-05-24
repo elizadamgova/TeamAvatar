@@ -1,105 +1,136 @@
 import pygame
-from Button import Button
-from Begining import Begin
-from Battle import Battle
-from Enemy import Enemy
+from Map import map_class
+from Button import button
+from Hero import HERO
+from NPC import npc
+from Scene import SCENE
 
 pygame.init()
 pygame.display.init()
 
-width, height = 1550, 990
-window = pygame.display.set_mode((width, height))
-clock = pygame.time.Clock()  # for control over fps
-clock.tick(60)
-pygame.display.set_caption("The four elements")
-iconImage = pygame.image.load("icon.png")
+width, height = 1550, 990 #1000, 700 ##
+wh = (width, height)
+window = pygame.display.set_mode(wh)
+clock = pygame.time.Clock()
+clock.tick(30)
+text_font = pygame.font.Font('freesansbold.ttf', 20)
+hello = text_font.render('Hello, world!', True, (0, 0, 0))
+
+
+
+pygame.display.set_caption("the four elements")
+iconImage =pygame.image.load("IconImage.jpg")
 pygame.display.set_icon(iconImage)
-
-character_icon = "red.png"
-
-#start_cart = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "earth" )
-start = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "earth" )
-n_ready = pygame.image.load("NotReady.png")
-not_ready= Begin(n_ready, [start])
+menu = pygame.transform.scale(pygame.image.load("old_book_v2.jpg"), wh)
 
 
 
-earth_kingdom = pygame.transform.scale(pygame.image.load("Earth_kingdom.jpg"), (width, height) )
-city_earth_kingdom = pygame.transform.scale(pygame.image.load("The_well.png"), (width, height) )
+on_map = False
+map = {}
+notReady = map_class( pygame.transform.scale(pygame.image.load("NotReady.png"), wh), [])
+map["notready"] = notReady
 
-tavern = Button(50, 750, pygame.transform.scale(pygame.image.load("Tavern.png"), (50, 50)), pygame, "city")
-market = Button(750, 750, pygame.transform.scale(pygame.image.load("Market.png"), (50, 50)), pygame, "city")
-start_cart = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "first" )
+fire_kingdom = button(pygame, pygame.image.load("fire.png"), 250, 100, "notready")#"fire_kingdom")
+earth_kingdom = button(pygame, pygame.image.load("earth.png"), 250, 750, "notready")#"earth_kingdom")
+water_kingdom = button(pygame, pygame.image.load("water.png"), 750, 100, "notready")#"water_kingdom")
+air_kingdom = button(pygame, pygame.image.load("air.png"), 750, 750, "notready")#"air_kingdom")
+bigmap = map_class( pygame.transform.scale(pygame.image.load("Vankila.jpg"), wh), [fire_kingdom, earth_kingdom, water_kingdom, air_kingdom])
 
-earth_scene= Begin(earth_kingdom, [start_cart, tavern, market])
-city_earth_scene= Begin(city_earth_kingdom, [start_cart])
+map["fire_kingdom"] = fire_kingdom
+map["earth_kingdom"] = earth_kingdom
+map["water_kingdom"] = water_kingdom
+map["air_kingdom"] = air_kingdom
 
-
-start_cart = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "red" )
-background = pygame.transform.scale((pygame.image.load("menu_background3.png")), (width, height))
-first_scene = Begin(background, [start_cart])
-
-
-#fire = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "NotReady")
-BigMap = pygame.transform.scale((pygame.image.load("BigMap.png")), (width, height))
-
-
-fire = Button(50, 50, pygame.transform.scale(pygame.image.load("Fire.png"), (50, 50)), pygame, "NotReady")
-water = Button(750, 50, pygame.transform.scale(pygame.image.load("Water.png"), (50, 50)), pygame, "NotReady")
-darkness = Button(50, 750, pygame.transform.scale(pygame.image.load("Darkness.png"), (50, 50)), pygame, "NotReady")
-earth = Button(750, 750, pygame.transform.scale(pygame.image.load("Earth.png"), (50, 50)), pygame, "earth")
-#fire = Button(50, 50, pygame.transform.scale(pygame.image.load("StartButton.png"), (50, 50)), pygame, "NotReady")
-BigMap = pygame.transform.scale((pygame.image.load("BigMap.png")), (width, height))
-second_scene = Begin(BigMap, [fire, water, darkness, earth])
+open_map = bigmap
 
 
-fire_attack = Button(50, 50, pygame.transform.scale(pygame.image.load("Fire_attack.png"), (50, 50)), pygame, "fire")
-block = Button(750, 50, pygame.transform.scale(pygame.image.load("Block.png"), (50, 50)), pygame, "block")
-actions_hero = {"fire": 10,
-                "block": 10}
-actions_enemy = {"fire": 10}
-desert_battle = pygame.transform.scale((pygame.image.load("Battle.jpg")), (width, height))
-enemy = Enemy("Enemy", actions_enemy, [],  pygame.transform.scale((pygame.image.load("red.png")), (100, 100)), 100 )
-battle_scene = Battle(desert_battle, enemy,  [fire_attack, block], actions_hero, 100)
+hero = HERO('Mark', pygame.transform.scale(pygame.image.load("red.png"), (55, 55)), width, height)
+npc1 = npc(text_font, pygame, 'Mimi',  pygame.transform.scale(pygame.image.load("blue.png"), (55, 55)), 55, 10, pygame.transform.scale(pygame.image.load("old_book.png"), wh), "talk", ["Hi"])
 
-scenes = {"red": second_scene,
-          "NotReady": not_ready,
-          "earth":earth_scene,
-          "first":first_scene,
-          "city": city_earth_scene}
-scene = battle_scene
+scene = SCENE(pygame.transform.scale(pygame.image.load("the_well.png"), wh), hero, [npc1], [pygame.Rect(600, 280, 200, 200)])# pygame.Rect(200, 100, 100, 100)
+on_scene = True
+
 
 running = True
 while running:
+    if(on_map):
+        open_map.draw_map(window)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                break
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mx, my = pygame.mouse.get_pos()
+                if(open_map.hit_button((mx, my))):
+                    open_map = map[open_map.hit_button((mx, my))]
+    elif(on_scene):
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    break
+                elif event.type == pygame.KEYDOWN:
+                    x, y = 0, 0
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                        break
+                    elif event.key == pygame.K_RIGHT:
+                        x+=10
+                        #scene.move(10, 0)
+                    elif event.key == pygame.K_LEFT:
+                        x-=10
+                        #scene.move(-10, 0)
+                    elif event.key == pygame.K_DOWN:
+                        y+=10
+                        #scene.move(0, 10)
+                    elif event.key == pygame.K_UP:
+                        y-=10
+                        #scene.move(0, -10)
+                    elif event.key == pygame.K_t:
+                        scene.talk(window, (x, y))
+                        #scene.on_npc_con = True
+                    scene.move(pygame, x, y)
+        scene.draw(pygame, window)
 
 
-
-    scene.drawing(window)
-    pygame.display.update()
-    # mx, my = pygame.mouse.get_pos()
-    for event in pygame.event.get():
-
-        if event.type == pygame.QUIT:
+    else:
+        window.blit(menu, (0, 0))
+        window.blit(hello, (250, 250))
+        """       keys = pygame.key.get_pressed()
+        if keys[pygame.QUIT]:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mx, my = pygame.mouse.get_pos()
+            break
+        elif keys[pygame.K_ESCAPE]:
+            running = False
+            break
+        elif keys[pygame.K_RIGHT]:
+            hero.move(10, 0)
+        elif keys[pygame.K_LEFT]:
+            hero.move(-10, 0)
+        elif keys[pygame.K_DOWN]:
+            hero.move(0, 10)
+        elif keys[pygame.K_UP]:
+            hero.move(0, -10)"""
 
-            """
-            if(scene.hit_button((mx, my))):
-                scene = scenes[scene.hit_button((mx, my))]
-            #if(b.collides((mx, my))):
-             #   window.fill((255, 255, 0))
-             """
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    break
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                        break
+                    elif event.key == pygame.K_RIGHT:
+                        hero.move(10, 0)
+                    elif event.key == pygame.K_LEFT:
+                        hero.move(-10, 0)
+                    elif event.key == pygame.K_DOWN:
+                        hero.move(0, 10)
+                    elif event.key == pygame.K_UP:
+                        hero.move(0, -10)
 
-    if (running == False):  # else there will be segmentation fault
-        break
-
-    #b.draw_button(window)#(255, 255, 255)
-    """red.draw_button(window)
-    blue.draw_button(window)
-    silver.draw_button(window)
-    green.draw_button(window)
-    """
-    #pygame.display.update()
+        hero.draw(window)
+    pygame.display.update()
 
 pygame.quit()
+

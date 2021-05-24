@@ -1,27 +1,17 @@
-#import pygame
+width, height = 200, 100
 
-width_button, height_button = 50, 30
-
-
-class Button:
-    def __init__(self, x, y, picture, pygame, hit_result):
+class button:
+    def __init__(self, pygame, picture, x, y, result):
         self.picture = picture
-        self.pygame = pygame
-        self.hit_result = hit_result
-        self.rect = self.pygame.Rect(x, y, width_button, height_button)
+        self.resultt = result
+        self.rect = pygame.Rect(x, y, width, height)
+        self.position = (x, y)
 
     def draw_button(self, window):
-        #self.pygame.draw.rect(window, (0, 0, 0), self.rect)
-        window.blit(self.picture, (self.rect.x, self.rect.y))
+        window.blit(self.picture, self.position)
+
     def collides(self, mouse):
         return self.rect.collidepoint(mouse)
+
     def result(self):
-        return self.hit_result
-
-    """def draw_button_image(self): #name = image
-        #pygame.draw.rect(window, (255, 0, 0), self.rect)
-
-        the_image = pygame.transform.scale(  pygame.image.load(self.name), (50, 30))
-
-
-"""
+        return self.resultt
