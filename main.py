@@ -4,11 +4,13 @@ from Button import button
 from Hero import HERO
 from NPC import npc
 from Scene import SCENE
+from Enemy import Enemy
+from Battle import Battle
 
 pygame.init()
 pygame.display.init()
 
-width, height = 1550, 990 #1000, 700 ##
+width, height = 1000, 700 ##1550, 990 #
 wh = (width, height)
 window = pygame.display.set_mode(wh)
 clock = pygame.time.Clock()
@@ -44,11 +46,23 @@ map["air_kingdom"] = air_kingdom
 open_map = bigmap
 
 
-hero = HERO('Mark', pygame.transform.scale(pygame.image.load("red.png"), (55, 55)), width, height)
+hero = HERO('Mark', pygame.transform.scale(pygame.image.load("red.png"), (55, 55)), width, height, text_font)
 npc1 = npc(text_font, pygame, 'Mimi',  pygame.transform.scale(pygame.image.load("blue.png"), (55, 55)), 55, 10, pygame.transform.scale(pygame.image.load("old_book.png"), wh), "talk", ["Hi"])
 
 scene = SCENE(pygame.transform.scale(pygame.image.load("the_well.png"), wh), hero, [npc1], [pygame.Rect(600, 280, 200, 200)])# pygame.Rect(200, 100, 100, 100)
-on_scene = True
+on_scene = False#True
+
+fire_attack = button(pygame, pygame.image.load("Fire_attack.png"), 300, 750, "", 100, 250)
+block = button(pygame, pygame.image.load("Block.png"), 750, 750, "", 100, 250)
+block.set_type("block")
+
+
+
+
+
+on_battle = True
+enemy = Enemy(50, 50, 5, 10, pygame.transform.scale(pygame.image.load("blue.png"), (55, 55)), text_font)
+battle = Battle(enemy, hero, pygame.transform.scale(pygame.image.load("Battle.jpg"), wh), [fire_attack, block])
 
 
 running = True
@@ -91,6 +105,12 @@ while running:
                         #scene.on_npc_con = True
                     scene.move(pygame, x, y)
         scene.draw(pygame, window)
+    elif on_battle:
+        pygame.time.wait(1000)
+        battle.draw(window)
+        mx, my = pygame.mouse.get_pos()
+        battle.fight((mx, my))
+
 
 
     else:

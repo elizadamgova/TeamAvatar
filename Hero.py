@@ -3,7 +3,7 @@ import pygame
 width, height = 55, 55
 
 class HERO:
-    def __init__(self, name, picture, screen_w, screen_h):
+    def __init__(self, name, picture, screen_w, screen_h, font):
         self.name = name
         self.picture = picture
         self.rect = pygame.Rect(0, 0, width, height)
@@ -11,6 +11,11 @@ class HERO:
         self.y = 0
         self.screen_w = screen_w
         self.screen_h = screen_h
+        self.hp = 100
+        self.max_hp = 100
+        self.AC = 10
+        self.attack = 10
+        self.font = font
 
     def move(self, x, y):
         if(self.x + x > self.screen_w - width or self.x + x <0):
@@ -24,3 +29,20 @@ class HERO:
 
     def draw(self, window):
         window.blit(self.picture, (self.x, self.y))
+    def draw_in_battle(self, window, pos, pos_hp):
+        window.blit(self.picture, pos)
+        window.blit(self.font.render("{} / {}".format(self.hp, self.max_hp), True, (0, 0, 0)), pos_hp)
+
+    def is_dead(self):
+        if self.hp <= 0:
+            return True
+        return False
+
+    def get_hit(self, attack):
+        if attack >= self.ac:
+            return True
+        return False
+
+    def take_dmg(self, dmg):
+        self.hp -= dmg
+        return self.is_dead()

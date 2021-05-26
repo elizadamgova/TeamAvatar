@@ -1,22 +1,32 @@
-from random import randrange
+import random
 class Enemy:
-    def __init__(self, name, attacks, loot, picture, health):
-        self.name = name
-        self.attacks = attacks
-        self.loot = loot
+    def __init__(self, hp, max_hp, attack, ac, picture, font):
+        self.hp = hp
+        self.max_hp = max_hp
+        self.attack = attack
+        self.ac = ac
         self.picture = picture
-        self.beaten = False
-        self.health = health
+        self.font = font
 
-    def is_beaten(self):
-        return self.loot
-
-    def atacks(self):
-        return ( self.atacks + randrange(5))
-    def get_hit(self, dmg):
-        self.health -= dmg
-        if self.health <= 0:
-            self.beaten = True
+    def is_dead(self):
+        if self.hp <= 0:
             return True
-        else:
-            return False
+        return False
+
+    def draw(self, window, pos, pos_hp):
+        window.blit(self.picture, pos)
+        window.blit(self.font.render("{} / {}".format(self.hp, self.max_hp), True, (0, 0, 0)), pos_hp)
+    def get_hit(self, attack):
+        if attack >= self.ac:
+            return True
+        return  False
+    def take_dmg(self, dmg):
+        self.hp -= dmg
+        return self.is_dead()
+
+    def attack(self):
+        hit = random.randint(self.attack, self.attack + 10)
+        return hit
+    def dmg(self):
+        dmg = 5 + random.randint(0, 5)
+        return dmg
