@@ -25,25 +25,63 @@ class Battle:
         for att in self.attacks:
             att.draw_button(window)
 
+    """
     def fight(self, mouse):
+
         if self.win or self.lose:
+
             return
-        bonus_ac = 0
-        attacked = False
+        #bonus_ac = 0
+        #attacked = False
         for att in self.attacks:
+
             if att.collides(mouse):
-                attacked = True
-                if att.type == 'block':
-                    bonus_ac = 10
-                else:
-                    hit = random.randint(self.hero.attack, self.hero.attack + 10)
-                    if self.enemy.get_hit(hit):
-                        if self.enemy.take_dmg(10 + random.randint(0, 5)):
-                            self.win = True
-                            return
-                break
-        if attacked:
-            if self.hero.get_hit(self.enemy.attack() -bonus_ac):
+                print("HI")
+                #attacked = True
+                #if att.type == "block":
+                  #  bonus_ac = 10
+                #else:
+                    #hit = random.randint(self.hero.attack, self.hero.attack + 10)
+                    #if self.enemy.get_hit(hit):
+                if self.enemy.take_dmg(10 + random.randint(0, 5)):
+                    self.win = True
+                    return
                 if self.hero.take_dmg(self.enemy.dmg()):
                     self.lose = True
+                    return
+                break
+        if attacked:
+            #if self.hero.get_hit(self.enemy.attack() - bonus_ac):
+           if self.hero.take_dmg(self.enemy.dmg()):
+                self.lose = True
+"""
+
+    def fight(self,  pygame):
+            if self.win or self.lose:
+
+                return
+            #bonus_ac = 0
+            #attacked = False
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN :
+                    if event.key == pygame.K_a:
+                        print("HI")
+                        #attacked = True
+                        #if att.type == "block":
+                          #  bonus_ac = 10
+                        #else:
+                            #hit = random.randint(self.hero.attack, self.hero.attack + 10)
+                            #if self.enemy.get_hit(hit):
+                        if self.enemy.take_dmg(5 + random.randint(0, 5)):#10 + random.randint(0, 5)):
+                            self.win = True
+                            return
+                        if self.hero.take_dmg(self.enemy.dmg()):
+                            self.lose = True
+                            return
+                        break
+
+            """if attacked:
+                #if self.hero.get_hit(self.enemy.attack() - bonus_ac):
+               if self.hero.take_dmg(self.enemy.dmg()):
+                    self.lose = True"""
 

@@ -25,12 +25,16 @@ class SCENE:
             if i.colliderect(pygame.Rect(self.hero.x+x, self.hero.y+y, 55, 55)):
                 #print("Hiii")
                 return
-        self.hero.move(x, y)
+        #pygame.Rect.move(self.hero.rect, self.hero.x+x, self.hero.y+y)
+        self.hero.move(pygame, x, y)
     #def action(self, command):
-    def talk(self,window,  mouse):
+    def talk(self, pygame, window):
         for n in self.NPCS:
-            if n.interacts(mouse):
-                n.talk(window, mouse)
+            #print(n.interacts(pygame, pygame.Rect(self.hero.x,self.hero.y, self.hero.screen_w, self.hero.screen_h )))
+            if n.interacts(pygame, pygame.Rect(self.hero.x,self.hero.y, self.hero.screen_w, self.hero.screen_h )):
+                #print("Hi")
+                #n.talk(window,self.hero.rect)
                 self.on_npc_con = True
-                print("Hi")
                 self.talking_to = n
+                return True
+        return False

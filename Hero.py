@@ -11,20 +11,22 @@ class HERO:
         self.y = 0
         self.screen_w = screen_w
         self.screen_h = screen_h
-        self.hp = 100
+        self.hp = 50
         self.max_hp = 100
         self.AC = 10
         self.attack = 10
         self.font = font
+        self.titles = []
 
-    def move(self, x, y):
+    def move(self,pygame, x, y):
         if(self.x + x > self.screen_w - width or self.x + x <0):
             return
         if(self.y + y > self.screen_h - height or self.y + y <0):
             return
         self.x += x
         self.y += y
-        self.rect.move(x, y)
+        pygame.Rect.move(self.rect, (self.x + x, self.y + y))
+        #self.rect.move(x, y)
 
 
     def draw(self, window):
@@ -35,6 +37,7 @@ class HERO:
 
     def is_dead(self):
         if self.hp <= 0:
+            self.hp = 0
             return True
         return False
 

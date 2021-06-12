@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from Map import map_class
 from Button import button
 from Hero import HERO
@@ -27,7 +27,7 @@ menu = pygame.transform.scale(pygame.image.load("old_book_v2.jpg"), wh)
 
 
 
-on_map = False
+on_map  = False# True#
 map = {}
 notReady = map_class( pygame.transform.scale(pygame.image.load("NotReady.png"), wh), [])
 map["notready"] = notReady
@@ -49,18 +49,20 @@ open_map = bigmap
 hero = HERO('Mark', pygame.transform.scale(pygame.image.load("red.png"), (55, 55)), width, height, text_font)
 npc1 = npc(text_font, pygame, 'Mimi',  pygame.transform.scale(pygame.image.load("blue.png"), (55, 55)), 55, 10, pygame.transform.scale(pygame.image.load("old_book.png"), wh), "talk", ["Hi"])
 
-scene = SCENE(pygame.transform.scale(pygame.image.load("the_well.png"), wh), hero, [npc1], [pygame.Rect(600, 280, 200, 200)])# pygame.Rect(200, 100, 100, 100)
-on_scene = False#True
+scene = SCENE(pygame.transform.scale(pygame.image.load("the_well.png"), wh), hero, [npc1], [pygame.Rect(600, 280, 200, 200), pygame.Rect(50, 100, 200, 200)])# pygame.Rect(200, 100, 100, 100)
+#on_scene =False
+on_scene = False #True #
 
-fire_attack = button(pygame, pygame.image.load("Fire_attack.png"), 300, 750, "", 100, 250)
-block = button(pygame, pygame.image.load("Block.png"), 750, 750, "", 100, 250)
+fire_attack = button(pygame, pygame.image.load("Fire_attack.png"), 100, 300, "", 100, 250)
+block = button(pygame, pygame.image.load("Block.png"), 500, 500, "", 100, 250)
 block.set_type("block")
 
 
 
 
 
-on_battle = True
+on_battle = False #True
+#on_battle = False#
 enemy = Enemy(50, 50, 5, 10, pygame.transform.scale(pygame.image.load("blue.png"), (55, 55)), text_font)
 battle = Battle(enemy, hero, pygame.transform.scale(pygame.image.load("Battle.jpg"), wh), [fire_attack, block])
 
@@ -101,37 +103,57 @@ while running:
                         y-=10
                         #scene.move(0, -10)
                     elif event.key == pygame.K_t:
-                        scene.talk(window, (x, y))
+                        scene.talk(pygame, window)
                         #scene.on_npc_con = True
+                        #print(scene.on_npc_con)
+                        #print(scene.talk(pygame, window))#(scene.hero.x, scene.hero.y)
+                        #print(scene.hero.rect.x)
                     scene.move(pygame, x, y)
         scene.draw(pygame, window)
     elif on_battle:
-        pygame.time.wait(1000)
+        #pass
+        #pygame.time.wait(1000)
         battle.draw(window)
         mx, my = pygame.mouse.get_pos()
-        battle.fight((mx, my))
+        battle.fight(pygame)
 
 
 
     else:
+
+        pygame.event.pump()
         window.blit(menu, (0, 0))
         window.blit(hello, (250, 250))
-        """       keys = pygame.key.get_pressed()
-        if keys[pygame.QUIT]:
+        keys = pygame.key.get_pressed()
+
+        """if keys[pygame.QUIT]:
             running = False
             break
         elif keys[pygame.K_ESCAPE]:
             running = False
             break
-        elif keys[pygame.K_RIGHT]:
-            hero.move(10, 0)
-        elif keys[pygame.K_LEFT]:
-            hero.move(-10, 0)
-        elif keys[pygame.K_DOWN]:
-            hero.move(0, 10)
-        elif keys[pygame.K_UP]:
-            hero.move(0, -10)"""
+        """
+        x = 0
+        y = 0
+        if keys[pygame.K_RIGHT] == True:
+            print("Hi")
+            x += 1
+            #hero.move(pygame, 10, 0)
 
+        elif keys[pygame.K_LEFT]:
+            x -= 1
+            #hero.move(pygame, -10, 0)
+        elif keys[pygame.K_DOWN]:
+            y += 1
+            #hero.move(pygame, 0, 10)
+        elif keys[pygame.K_UP]:
+            y -= 1
+            #hero.move(pygame, 0, -10)
+
+        hero.move(pygame, x, y)
+        hero.draw(window)
+
+        """
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -141,15 +163,14 @@ while running:
                         running = False
                         break
                     elif event.key == pygame.K_RIGHT:
-                        hero.move(10, 0)
+                        hero.move(pygame, 10, 0)
                     elif event.key == pygame.K_LEFT:
-                        hero.move(-10, 0)
+                        hero.move(pygame, -10, 0)
                     elif event.key == pygame.K_DOWN:
-                        hero.move(0, 10)
+                        hero.move(pygame, 0, 10)
                     elif event.key == pygame.K_UP:
-                        hero.move(0, -10)
-
-        hero.draw(window)
+                        hero.move(pygame, 0, -10)
+"""
     pygame.display.update()
 
 pygame.quit()
