@@ -85,3 +85,8 @@ class Battle:
                if self.hero.take_dmg(self.enemy.dmg()):
                     self.lose = True"""
 
+    def reRo(self):
+        self.enemy.hp = self.enemy.max_hp
+        self.hero.hp = self.hero.max_hp
+        self.win = False
+        self.lose = False

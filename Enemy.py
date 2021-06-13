@@ -1,13 +1,18 @@
 import random
 class Enemy:
-    def __init__(self, hp, max_hp, attack, ac, picture, font):
+    def __init__(self, rect, hp, max_hp, attack, ac, picture, font):
+        self.rect = rect
         self.hp = hp
         self.max_hp = max_hp
         self.attack = attack
         self.ac = ac
         self.picture = picture
         self.font = font
+        self.type = "battle"
 
+
+    def interacts(self, pygame, heropos):
+        return pygame.Rect.colliderect(heropos, self.rect)
     def is_dead(self):
         if self.hp <= 0:
             return True
@@ -30,3 +35,6 @@ class Enemy:
     def dmg(self):
         dmg = 5 + random.randint(0, 5)
         return dmg
+
+
+

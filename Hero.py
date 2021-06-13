@@ -12,11 +12,13 @@ class HERO:
         self.screen_w = screen_w
         self.screen_h = screen_h
         self.hp = 50
-        self.max_hp = 100
+        self.max_hp = 50
         self.AC = 10
         self.attack = 10
         self.font = font
         self.titles = []
+        self.quests = []
+        self.seequest = False
 
     def move(self,pygame, x, y):
         if(self.x + x > self.screen_w - width or self.x + x <0):
@@ -31,6 +33,8 @@ class HERO:
 
     def draw(self, window):
         window.blit(self.picture, (self.x, self.y))
+        if self.seequest:
+            self.showQuests(window)
     def draw_in_battle(self, window, pos, pos_hp):
         window.blit(self.picture, pos)
         window.blit(self.font.render("{} / {}".format(self.hp, self.max_hp), True, (0, 0, 0)), pos_hp)
@@ -49,3 +53,25 @@ class HERO:
     def take_dmg(self, dmg):
         self.hp -= dmg
         return self.is_dead()
+
+    def getQuest(self, quest):
+        self.quests.append(quest)
+
+    def endQuest(self, NPC):
+        for quest in self.quests:
+            if quest.completed(NPC):
+                self.titles.append(quest.title)
+                self.quests.remove(quest)
+
+    def showQuests(self, window):
+        z, v = 250, 250
+        for quest in self.quests:
+            z += 50
+            v += 50
+            quest.draw(window,z, v)
+
+
+
+
+
+
