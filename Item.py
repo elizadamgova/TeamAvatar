@@ -1,5 +1,5 @@
 class Item:
-    def __init(self, name, picture, setOfQuest):
+    def __init__(self, name, picture, setOfQuest):
         self.name = name
         self.picture = picture
         self.setOfQuest = setOfQuest

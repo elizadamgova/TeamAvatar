@@ -1,7 +1,7 @@
 x, y = 200, 200
 
 class Quest:
-    def __init__(self,name,  pygame, font, NPCname, battle, text, background, setloot, title):
+    def __init__(self, name,  pygame, font, NPCname, battle, text, background, setloot, title):
         self.taken = False
         self.name = name
         self.rect = pygame.Rect(x, y, 200, 200)
@@ -16,9 +16,9 @@ class Quest:
         self.title = title
 
     def draw(self, window, x, y):
-        window.blit(self.background, x, y)
-        window.blit(self.font.render(self.text, True, (0, 0, 0)), x + 50, y)
-        window.blit(self.font.render("Progress: {}/{}".format(self.progress, len(self.setloot)), True, (0, 0, 0)), x+100 , y)
+        window.blit(self.background, (x, y))
+        window.blit(self.font.render(self.text, True, (255, 0, 0)),( x + 50, y+50))
+        window.blit(self.font.render("Progress: {}/{}".format(self.progress, len(self.setloot)), True, (0, 255, 0)), (x+100 , y+100))
 
     def is_finished(self):
         if(self.progress == len(self.setloot)):

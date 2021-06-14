@@ -1,10 +1,9 @@
 import random
 class Battle:
-    def __init__(self, enemy, hero, background, attacks):
+    def __init__(self, enemy, hero, background):
         self.enemy = enemy
         self.hero = hero
         self.background = background
-        self.attacks = attacks
         self.text = ''
         self.win = False
         self.lose = False
@@ -22,8 +21,8 @@ class Battle:
         self.enemy.draw(window, (400, 100), (400, 50))
         self.hero.draw_in_battle(window, (400, 400), (400, 350))
         window.blit(self.enemy.font.render(self.text, True, (0, 0, 0)), (600, 200))
-        for att in self.attacks:
-            att.draw_button(window)
+        #for att in self.attacks:
+          #  att.draw_button(window)
 
     """
     def fight(self, mouse):
@@ -56,16 +55,14 @@ class Battle:
                 self.lose = True
 """
 
-    def fight(self,  pygame):
+    def fight(self,  pygame, window):
             if self.win or self.lose:
-
                 return
             #bonus_ac = 0
             #attacked = False
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN :
-                    if event.key == pygame.K_a:
-                        print("HI")
+                    if event.key == pygame.K_d:
                         #attacked = True
                         #if att.type == "block":
                           #  bonus_ac = 10
@@ -79,13 +76,13 @@ class Battle:
                             self.lose = True
                             return
                         break
-
+            self.draw(window)
             """if attacked:
                 #if self.hero.get_hit(self.enemy.attack() - bonus_ac):
                if self.hero.take_dmg(self.enemy.dmg()):
                     self.lose = True"""
 
-    def reRo(self):
+    def reDo(self):
         self.enemy.hp = self.enemy.max_hp
         self.hero.hp = self.hero.max_hp
         self.win = False

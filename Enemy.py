@@ -1,11 +1,10 @@
 import random
 class Enemy:
-    def __init__(self, rect, hp, max_hp, attack, ac, picture, font):
+    def __init__(self, rect, max_hp, attack,  picture, font):
         self.rect = rect
-        self.hp = hp
+        self.hp = max_hp
         self.max_hp = max_hp
         self.attack = attack
-        self.ac = ac
         self.picture = picture
         self.font = font
         self.type = "battle"
@@ -21,6 +20,10 @@ class Enemy:
     def draw(self, window, pos, pos_hp):
         window.blit(self.picture, pos)
         window.blit(self.font.render("{} / {}".format(self.hp, self.max_hp), True, (0, 0, 0)), pos_hp)
+
+    def draw_onscene(self, window):
+            window.blit(self.picture, (600, 600))
+
     def get_hit(self, attack):
         if attack >= self.ac:
             return True
